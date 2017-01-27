@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>HTML5 gps</title>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <script language="javascript">
+	var x=document.getElementById("output2");
+    var pg=document.getElementById("outputpg");
+
+  var lat;
+  var lon;
+  function getLocation()  {
+  	if (navigator.geolocation)    {
+    	navigator.geolocation.getCurrentPosition(showPosition);
+    } else{
+    	x.innerHTML="Geolocation is not supported by this browser.";
+    }
+  }
+
+// todo: get rid of this dup
+    function getLocationpg()  {
+  	if (navigator.geolocation)    {
+    	navigator.geolocation.getCurrentPosition(showPosition3);
+    } else{
+    	pg.innerHTML="Geolocation is not supported by this browser.";
+    }
+  }
+  
+  function showPosition(position)  {
+	//alert(position.coords.latitude + ":" + position.coords.longitude);
+  	document.getElementById("output2").innerHTML= position.coords.latitude + ": " + position.coords.longitude;  	
+  	document.getElementById("1").innerHTML= position.coords.latitude + ": " + position.coords.longitude;
+  	lat = position.coords.latitude;
+  	lon = position.coords.longitude
+  }
+    
+  function showPosition3(position)  {
+	//alert(position.coords.latitude + ":" + position.coords.longitude);
+  	document.getElementById("outputpg").innerHTML= position.coords.latitude + ": " + position.coords.longitude;  	
+  	document.getElementById("3").innerHTML= position.coords.latitude + ": " + position.coords.longitude;
+  	lat = position.coords.latitude;
+  	lon = position.coords.longitude
+  }
+    
+ function FactoryXMLHttpRequest() {
+	   if(window.XMLHttpRequest) {
+		   // Mozilla
+		   return new XMLHttpRequest();
+	   } else if(window.ActiveXObject) {
+		   try {
+		    // Internet Explorer only
+            return new ActiveXObject("Microsoft.XMLHTTP");
+		   } catch (e) {
+		   }
+       }
+       // Verify Chrome, Firefox, Opera and Apple
+       throw new Error("Could not get an AJAX XMLHttpRequest Object");
+ }
+
+ function Ajax() {
+	 this._xmlHttp = new FactoryXMLHttpRequest();
+ }
+
+ // This code is loosely based on 
+ // p.22 of Ajax Patterns and Best Practices by Christian Gross (2006)
+ // and http://www.w3schools.com/js/js_timing.asp
+ // htmlDOMElementId must be an integer
+ function AjaxUpdateEvent(htmlDOMelementId, status, statusText, responseText, responseXML) {
+	 // This line updates the DOM <span id="[0-9]+"/>
+	 document.getElementById(htmlDOMelementId).innerHTML = responseText;
+	 // flash data cell only if data has changed
+	 var color = "orange";
+	 if(flicker[htmlDOMelementId] < 1) {
+		 flicker[htmlDOMelementId] = 1;
+		 color = "white";
+	 } else {
+		 flicker[htmlDOMelementId] = 0;
+	 }
+     if(responseText != lastValue[htmlDOMelementId]) {
+         document.getElementById(htmlDOMelementId).style.color = color;
+         lastValue[htmlDOMelementId] = responseText;
+     }
+	 
+ }
+
+ // display flags
+ var flicker = new Array();
+ var lastValue = new Array();
+ // Timer variables
+ var timers = new Array();
+ var timerStateArray = new Array();
+ var ajax = new Array();
+ // initialize all arrays
+ var i = 1;
+ //for (i=0;i<<2;i=i+1) {
+     timerStateArray[i] = 0;
+     ajax[i] = new Ajax();
+     ajax[i].complete = AjaxUpdateEvent;
+     flicker[i] = 0;
+ //}
+ 
+ function Ajax_call(url, htmlDOMelementId) {
+   	 //getLocation();
+	 ////alert(lat);
+ 
+ 	 var instance = this;
+	 this._xmlHttp.open('GET', url, true);
+	 // inner anonymous function
+	 this._xmlHttp.onreadystatechange = function() {
+		 switch(instance._xmlHttp.readyState) {
+		 case 1:
+			 instance.loading();
+			 break;
+		 case 2:
+			 instance.loaded();
+			 break;
+		 case 3:
+			 instance.interactive();
+			 break;
+		 case 4:
+			 // pass parameters
+			 instance.complete(
+					 htmlDOMelementId,
+					 instance._xmlHttp.status,
+					 instance._xmlHttp.statusText,
+					 instance._xmlHttp.responseText,
+					 instance._xmlHttp.responseXML);
+			 break;
+		 }
+	 };
+	 this._xmlHttp.send(null);
+ }
+
+ function Ajax_loading(){ }
+ function Ajax_loaded(){ }
+ function Ajax_interactive(){ }
+ function Ajax_complete(htmlDOMelementId, status, statusText, responseText, responseHTML){ }
+
+ // create static class functions
+ Ajax.prototype.loading = Ajax_loading;
+ Ajax.prototype.loaded = Ajax_loaded;
+ Ajax.prototype.interactive = Ajax_interactive;
+ Ajax.prototype.complete = Ajax_complete;
+ Ajax.prototype.call = Ajax_call;
+
+ // Base case: Switch the timer flag and call the main loop
+ function doTimer(url,cell,speed,htmlDOMelementId) {
+//     if(!timerStateArray[cell]) {
+//    	  timerStateArray[cell] = 1;
+          timedCall(url,cell,speed,htmlDOMelementId);
+//     }
+ }
+ // Main timing loop calls itself
+ function timedCall(url,cell,speed,htmlDOMelementId) {
+ 
+     ajax[cell].call(url,htmlDOMelementId);
+//     if(timerStateArray[cell]) {
+           timers[cell] = setTimeout(function() { timedCall(url,cell,speed,htmlDOMelementId); }, speed); // no speed = max speed
+//     }
+ }
+ 
+ function doPing(url) {
+ }	
+    
+    </script>
+</head>
+<body text="#ffffff" bgcolor="#303030" link="#33D033" vlink="#D030D0" alink="#D03000" onload="javascript:start();">
+<!-- img src="block_fff.jpg" alt="vOacis Application"/-->
+
+<p id="demoping">ping server:</p>
+<!-- button onclick=doPing('/FrontController?action=put&c=')>Invoke</button-->
+<button onclick=doTimer('/FrontController?action=put&c=',1,600,2)>Server Start</button>
+<button onclick=doTimer('/FrontController?action=put&c=',1,1600,2)>Server Stop</button>
+
+<div id="outputping2"></div>
+
+<b id="outputping">Message</b><br/>
+<textarea rows=3 cols=40  id="2"></textarea>
+<!-- canvas id="example" width="400" height="160">
+This text is displayed if your browser does not support HTML5 Canvas - try the latest Android 2.3, IE9, Firefox or Chrome.
+</canvas-->
+<br/>
+
+<p id="demo">GPS Coord via html5 :</p>
+<!-- button onclick=doTimer('/logger/FrontController?action=put&c=',1,400,1)-->
+<button onclick=getLocation()>Invoke</button>
+<div id="output2"></div>
+
+<!-- text id="output"></text-->
+<b id="output">Output</b><br/>
+<textarea id="1"></textarea>
+
+<p id="demopg">GPS Coord via native PhoneGap :</p>
+<button onclick=getLocationpg()>Invoke</button>
+<div id="outputpg2"></div>
+<b id="outputpg">Output</b><br/>
+<textarea id="3"></textarea>
+
+<!-- canvas id="example" width="400" height="160">
+This text is displayed if your browser does not support HTML5 Canvas - try the latest Android 2.3, IE9, Firefox or Chrome.
+</canvas-->
+<br/>
+
+</body>
+</html>

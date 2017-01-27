@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+<f:loadBundle basename="resources.application" var="msg"/>
+
+<head>
+    <title><h:outputText value="#{msg.welcomeTitle}" /></title>
+		<script src="../scripts/jquery-1.9.1.min.js"></script><!-- IE8 -->
+		<!-- script src="../scripts/jquery-2.0.0.min.js"></script!-->
+		<script src="../scripts/gps.js"></script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-9638874893594007";
+/* gps_add_728_90 */
+google_ad_slot = "9413214396";
+/* objectivej_728_90 */
+//google_ad_slot = "9016261595";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>		
+</head>
+
+<body text="#eeeeee" bgcolor="#303030" link="#33D033" vlink="#D030D0" alink="#D03000" onload="javascript:start();">
+<h4><h:outputText value="#{msg.welcomeHeading}" /></h4>
+<p><h:outputText value="#{msg.welcomeMessage}" /></p>
+<p>gps: <h:outputText value="#{monitorBean.gps}"/></p>
+<p>Status: <h:outputText value="#{monitorBean.status}"/>:<span id="status"></span></p>
+<br/>
+<h:button>Populate</h:button>
+<h:button>Read</h:button>
+<h:button>Write</h:button>
+<h:button>Delete</h:button>
+<br/>
+		<a href="http://jquery.com/">jQuery</a>
+		<script>    
+		$( document ).ready(function() {
+		        $( "a" ).click(function( event ) {
+		                    alert( "The link will no longer work" );            
+		                    event.preventDefault();        
+		        });    
+		});    
+		</script>
+
+<p id="demoping">ping server:</p>
+<!-- button onclick=doPing('/logger/FrontController?action=put&c=')>Invoke</button-->
+
+<div id="outputping2"></div>
+
+<b id="outputping">Message</b><br/>
+<textarea rows="3" cols="40"  id="2"></textarea>
+<!-- canvas id="example" width="400" height="160">
+This text is displayed if your browser does not support HTML5 Canvas - try the latest Android 2.3, IE9, Firefox or Chrome.
+</canvas-->
+<br/>
+
+<p id="demo">GPS Coord via html5 :</p>
+<!-- button onclick=doTimer('/logger/FrontController?action=put&c=',1,400,1)-->
+<button onclick="getLocationUpdate()">Invoke</button>
+<div id="output2"></div>
+
+<!-- text id="output"></text-->
+<b id="output">Output</b><br/>
+<textarea id="1"></textarea>
+
+<p id="demopg">GPS Coord via native PhoneGap :</p>
+<button onclick="getLocationpg()">Invoke</button>
+<div id="outputpg2"></div>
+<b id="outputpg">Output</b><br/>
+<textarea id="3"></textarea>
+
+<!-- canvas id="example" width="400" height="160">
+This text is displayed if your browser does not support HTML5 Canvas - try the latest Android 2.3, IE9, Firefox or Chrome.
+</canvas-->
+<br/>
+</body>
+</html>

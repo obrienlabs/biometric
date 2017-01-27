@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>HTML 5 Canvas Animation Example - no Java Applet or Flash or SVG plugin required</title>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <script language="javascript">
+    var c=1;
+    var t;
+    var x=0;
+	var pixelSize = 4;
+	var width = 70;
+	var height = 40;
+	var frame = 1;
+
+		//tl 45,21.049,75,59.116,370
+	var tl_lat = 45.350817;
+	var tl_lon = -75.985267;
+	var br_lat = 45.32695;
+	var br_lon = -75.929717;
+	var home_lat = 45.34388333;
+	var home_lon = -75.94043333;
+	
+	
+	var img_length = 2560;//1920;
+	var img_height = 1600;//1041;
+	var lat_scale = (tl_lat - br_lat) / img_height; // per pixel
+	var lon_scale = (br_lon - tl_lon) / img_length;
+	//alert(lat_scale);
+	//alert(lon_scale); 
+	var lon = 1;
+	var lat = 1;
+
+    var img = new Image();  
+	  var lat;
+	  var lon;
+	  
+	  function getLocation()  {
+	    if (navigator.geolocation)    {
+	        navigator.geolocation.getCurrentPosition(showPosition);
+	    } else{
+	        x.innerHTML="Geolocation is not supported by this browser.";
+	    }
+	  }
+
+	function init() {
+		var x=0;
+		var y=0;
+		var offset = 0;
+	}
+
+	  function showPosition(position)  {
+		    //alert(position.coords.latitude + ":" + position.coords.longitude);
+		    //document.getElementById("output2").innerHTML= position.coords.latitude + ": " + position.coords.longitude;      
+		    //document.getElementById("1").innerHTML= position.coords.latitude + ": " + position.coords.longitude;
+		    //lat = home_lat;
+		    //lon = home_lon;
+		    lat = position.coords.latitude;
+		    lon = position.coords.longitude;
+		  }
+	
+	function display() {
+		if(frame == 1) {
+			frame = 0;
+		} else {
+			frame = 1;
+		}
+		
+		
+        var example = document.getElementById('example');
+        var context = example.getContext('2d');
+        // get gps
+        getLocation();
+        //navigator.geolocation.getCurrentPosition(showPosition);
+
+		var x = 320;
+		var y = 480;
+		var ox = -((tl_lon-lon) / lon_scale);
+		var oy = ((tl_lat-lat) / lat_scale);
+		//alert(ox);
+   	    //context.fillStyle = "rgb(0,0,0)";
+       	//context.fillRect(0,0,400,400);
+        drawing = new Image() 
+        drawing.src = "march_highlands_asus.png";//south_march_google.png" 
+        context.drawImage(drawing,320-ox,480-oy);
+		//context.drawImage(drawing,320-2063,480-496);
+        var text = "012345678";
+        var cs = Number(text.substring(2,4));
+        //context.lineWidth = 2;
+//        context.strokeStyle = "white";
+        //context.stroke();
+//        context.fillStyle = 'red';
+        context.font = '16pt Calibri';
+        context.fillStyle = 'white';
+
+        context.fillText(cs, 10,30);
+        var _lat = Number(ox);//tl_lat - lat);
+        //context.lineWidth = 3;
+//        context.strokeStyle = "blue";
+        context.fillStyle = 'yellow';
+        //context.stroke();
+        context.fillText(_lat, 10,60);
+        var _lon = Number(oy);//tl_lon - lon);
+        //context.lineWidth = 3;
+//        context.strokeStyle = "green";
+        context.fillStyle = 'orange';
+        //context.stroke();
+        context.fillText(_lon, 10,90);
+
+		// draw point
+/*		context.beginPath();
+        context.strokeStyle = "white";
+        context.lineWidth = 2;
+     	context.arc(x, y, 4, 0, 2 * Math.PI, counterClockwise);
+		context.stroke();
+*/
+		if(frame == 1) {
+			context.globalAlpha=0.5; // Half opacity
+    	    context.fillStyle = "rgb(255,0,0)";
+        	context.fillRect(x+12,y+12, 8,8);
+    	    context.fillStyle = "rgb(255,255,255)";
+        	context.fillRect(x,y,32,32);
+			context.globalAlpha=1.0; 
+		}
+
+	}
+
+	function iterate() {
+		t=setTimeout("iterate()",1000);
+		var cell = 0;
+		display();
+	}
+    // http://en.wikipedia.org/wiki/Canvas_element
+
+	function start() {
+		init();
+		iterate();
+	}
+    </script>
+</head>
+<body text="#000000" bgcolor="#ffffff" link="#33D033" vlink="#D030D0" alink="#D03000" onload="javascript:start();">
+<!-- img src="block_fff.jpg" alt="vOacis Application"/-->
+<canvas id="example" width="640" height="1280"/>
+</body>
+</html>

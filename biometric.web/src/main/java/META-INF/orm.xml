@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+<!-- because of https://hibernate.onjira.com/browse/HHH-6181 we must keep a dummy orm.xml until Hibernate 5 if we
+     wish to avoid 60-300 sec file search for mapping annotations in all class files in the classpath
+     Hibernate 4 currently ignores the exclude-unlisted-classes element in persistence.xml -->
+</entity-mappings>

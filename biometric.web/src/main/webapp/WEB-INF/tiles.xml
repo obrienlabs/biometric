@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ 
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+ 
+<tiles-definitions>
+ 
+    <definition name="defaultTemplate" template="/WEB-INF/template/template.jsp">
+        <put-attribute name="header" value="/WEB-INF/template/defaultHeader.jsp" />
+        <put-attribute name="navigation_bar" value="/WEB-INF/jsp/navigation_bar/default_navigation_bar.jsp" />
+        <put-attribute name="content" value="/WEB-INF/template/defaultContent.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/template/defaultFooter.jsp" />
+    </definition>
+ 
+    <definition name="startPage_def" extends="defaultTemplate">
+        <put-attribute name="title" value="Podcastpedia, knowledge to go" />
+        <put-attribute name="page_description" value="Educate yourself with selected podcasts from various domains such as science, technology, education, medicine, people, environment, spirituality and much more..."/>
+        <put-attribute name="navigation_bar" value="/WEB-INF/jsp/navigation_bar/start_navigation_bar.jsp" />
+        <put-attribute name="content" value="/WEB-INF/jsp/start/start_page.jsp"/>
+        <put-attribute name="og_title" value="Podcastpedia, knowledge to go"/>
+        <put-attribute name="og_desc" value="Educate yourself with selected podcasts from various domains such as science, technology, education, medicine, people, environment, spirituality and much more..."/>
+        <put-attribute name="og_image" value="http://www.podcastpedia.org/static/images/fb_share.png"/>
+    </definition>
+    
+    <definition name="podcastDetails" extends="defaultTemplate">
+        <put-attribute name="title" expression="${podcast.title}"/>
+    <put-attribute name="page_description" expression="${podcast.description}"/>
+        <put-attribute name="navigation_bar" value="/WEB-INF/jsp/navigation_bar/podcast_details_navigation_bar.jsp" />
+        <put-attribute name="content" value="/WEB-INF/jsp/podcastDetails.jsp"/>
+        <put-attribute name="og_title" expression="${podcast.title}"/>
+    <put-attribute name="og_desc" expression="${podcast.description}"/>
+    <put-attribute name="og_image" expression="${podcast.urlOfImageToDisplay}"/>
+    </definition>
+</tiles-definitions>

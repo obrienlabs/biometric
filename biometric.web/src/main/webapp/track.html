@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>HTML5 gps</title>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <script language="javascript">
+	var x=document.getElementById("output");
+
+  var lat;
+  var lon;
+  function getLocation()  {
+  	if (navigator.geolocation)    {
+    	navigator.geolocation.getCurrentPosition(showPosition);
+    } else{
+    	x.innerHTML="Geolocation is not supported by this browser.";
+    }
+  }
+  
+  function showPosition(position)  {
+	//alert(position.coords.latitude + ":" + position.coords.longitude);
+  	document.getElementById("output").innerHTML= position.coords.latitude + ": " + position.coords.longitude;  	
+  	document.getElementById("1").innerHTML= position.coords.latitude + ": " + position.coords.longitude;
+  	lat = position.coords.latitude;
+  	lon = position.coords.longitude
+  }
+    
+ function FactoryXMLHttpRequest() {
+	   if(window.XMLHttpRequest) {
+		   // Mozilla
+		   return new XMLHttpRequest();
+	   } else if(window.ActiveXObject) {
+		   try {
+		    // Internet Explorer only
+            return new ActiveXObject("Microsoft.XMLHTTP");
+		   } catch (e) {
+		   }
+       }
+       // Verify Chrome, Firefox, Opera and Apple
+       throw new Error("Could not get an AJAX XMLHttpRequest Object");
+ }
+
+ function Ajax() {
+	 this._xmlHttp = new FactoryXMLHttpRequest();
+ }
+
+ // This code is loosely based on 
+ // p.22 of Ajax Patterns and Best Practices by Christian Gross (2006)
+ // http://books.google.com/books?id=qNzBbUWhGM0C&printsec=frontcover&dq=ajax+patterns+and&cd=2#v=onepage&q&f=false
+ // and http://www.w3schools.com/js/js_timing.asp
+ // htmlDOMElementId must be an integer
+ function AjaxUpdateEvent(htmlDOMelementId, status, statusText, responseText, responseXML) {
+	 // This line updates the DOM <span id="[0-9]+"/>
+	 document.getElementById(htmlDOMelementId).innerHTML = responseText;
+	 // flash data cell only if data has changed
+	 var color = "orange";
+	 if(flicker[htmlDOMelementId] < 1) {
+		 flicker[htmlDOMelementId] = 1;
+		 color = "white";
+	 } else {
+		 flicker[htmlDOMelementId] = 0;
+	 }
+     if(responseText != lastValue[htmlDOMelementId]) {
+         document.getElementById(htmlDOMelementId).style.color = color;
+         lastValue[htmlDOMelementId] = responseText;
+     }
+	 
+ }
+
+ // display flags
+ var flicker = new Array();
+ var lastValue = new Array();
+ // Timer variables
+ var timers = new Array();
+ var timerStateArray = new Array();
+ var ajax = new Array();
+ // initialize all arrays
+ var i = 1;
+ //for (i=0;i<<2;i=i+1) {
+     timerStateArray[i] = 0;
+     ajax[i] = new Ajax();
+     ajax[i].complete = AjaxUpdateEvent;
+     flicker[i] = 0;
+ //}
+ 
+ function Ajax_call(url, htmlDOMelementId) {
+   	 getLocation();
+	 //alert(lat);
+ 
+ 	 var instance = this;
+	 this._xmlHttp.open('GET', url, true);
+	 // inner anonymous function
+	 this._xmlHttp.onreadystatechange = function() {
+		 switch(instance._xmlHttp.readyState) {
+		 case 1:
+			 instance.loading();
+			 break;
+		 case 2:
+			 instance.loaded();
+			 break;
+		 case 3:
+			 instance.interactive();
+			 break;
+		 case 4:
+			 // pass parameters
+			 instance.complete(
+					 htmlDOMelementId,
+					 instance._xmlHttp.status,
+					 instance._xmlHttp.statusText,
+					 instance._xmlHttp.responseText,
+					 instance._xmlHttp.responseXML);
+			 break;
+		 }
+	 };
+	 this._xmlHttp.send(null);
+ }
+
+ function Ajax_loading(){ }
+ function Ajax_loaded(){ }
+ function Ajax_interactive(){ }
+ function Ajax_complete(htmlDOMelementId, status, statusText, responseText, responseHTML){ }
+
+ // create static class functions
+ Ajax.prototype.loading = Ajax_loading;
+ Ajax.prototype.loaded = Ajax_loaded;
+ Ajax.prototype.interactive = Ajax_interactive;
+ Ajax.prototype.complete = Ajax_complete;
+ Ajax.prototype.call = Ajax_call;
+
+ // Base case: Switch the timer flag and call the main loop
+ function doTimer(url,cell,speed,htmlDOMelementId) {
+//     if(!timerStateArray[cell]) {
+//    	  timerStateArray[cell] = 1;
+          timedCall(url,cell,speed,htmlDOMelementId);
+//     }
+ }
+ // Main timing loop calls itself
+ function timedCall(url,cell,speed,htmlDOMelementId) {
+ 
+     ajax[cell].call(url,htmlDOMelementId);
+//     if(timerStateArray[cell]) {
+           timers[cell] = setTimeout(function() { timedCall(url,cell,speed,htmlDOMelementId); }, speed); // no speed = max speed
+//     }
+ }
+ 
+ function draw() {  
+ 	var ctx = document.getElementById('map').getContext('2d');  
+ 	var img = new Image();  
+ 	img.onload = function(){    
+ 		ctx.drawImage(img,0,0);    
+ 		//ctx.beginPath();    
+ 		//ctx.moveTo(30,96);    
+ 		//ctx.lineTo(70,66);    
+ 		//ctx.lineTo(103,76);    
+ 		//ctx.lineTo(170,15);    
+ 		//ctx.stroke();  
+ 	};  
+ 	img.src = 'south_march_google.png';
+ 	ctx.fillStyle = 'rgb(0,0,0,0)';
+ 	ctx.fillRect(0,0,100,100);
+ }
+   
+    var c=1;
+    var t;
+    var x=0;
+	var pixelSize = 4;
+	var width = 70;
+	var height = 40
+	var prev = new Array(2800);
+	var next = new Array(2800);
+
+
+	function loadGosperGliderGunSE() {
+		var x = 30;
+		var y = 20;
+		// origin is at 0,0 lower right
+		prev[(x)+ (width*(y-1))]=1;
+		prev[(x-1) + (width * (y))]=1;
+		prev[(x-1) + (width * (y-1))]=1;
+		prev[(x-2) + (width * (y-2))]=1;
+		prev[(x) + (width * (y-2))]=1;
+		// end of glider
+		prev[(x+10) + (width * (y-8))]=1;
+		prev[(x+10) + (width * (y-9))]=1;
+		prev[(x+11) + (width * (y-8))]=1;
+		prev[(x+11) + (width * (y-9))]=1;
+
+		prev[(x+6) + (width * (y-6))]=1;
+		prev[(x+6) + (width * (y-7))]=1;
+		prev[(x+1) + (width * (y-5))]=1;
+		prev[(x+1) + (width * (y-6))]=1;
+		prev[(x+1) + (width * (y-10))]=1;
+		prev[(x+1) + (width * (y-11))]=1;
+
+		prev[(x) + (width * (y-6))]=1;
+		prev[(x) + (width * (y-7))]=1;
+		prev[(x) + (width * (y-8))]=1;
+		prev[(x) + (width * (y-9))]=1;
+		prev[(x) + (width * (y-10))]=1;
+		prev[(x-1) + (width * (y-6))]=1;
+		prev[(x-1) + (width * (y-7))]=1;
+		prev[(x-1) + (width * (y-9))]=1;
+		prev[(x-1) + (width * (y-10))]=1;
+		prev[(x-2) + (width * (y-6))]=1;
+		prev[(x-2) + (width * (y-7))]=1;
+		prev[(x-2) + (width * (y-9))]=1;
+		prev[(x-2) + (width * (y-10))]=1;
+		prev[(x-3) + (width * (y-7))]=1;
+		prev[(x-3) + (width * (y-8))]=1;
+		prev[(x-3) + (width * (y-9))]=1;
+		prev[(x-8) + (width * (y-5))]=1;
+		prev[(x-8) + (width * (y-6))]=1;
+		prev[(x-8) + (width * (y-7))]=1;
+		prev[(x-9) + (width * (y-5))]=1;
+		prev[(x-9) + (width * (y-6))]=1;
+		prev[(x-9) + (width * (y-7))]=1;
+		prev[(x-10) + (width * (y-4))]=1;
+		prev[(x-10) + (width * (y-8))]=1;
+		prev[(x-11) + (width * (y-3))]=1;
+		prev[(x-11) + (width * (y-9))]=1;
+		prev[(x-12) + (width * (y-4))]=1;
+		prev[(x-12) + (width * (y-8))]=1;
+		prev[(x-13) + (width * (y-5))]=1;
+		prev[(x-13) + (width * (y-6))]=1;
+		prev[(x-13) + (width * (y-7))]=1;
+
+		prev[(x-23) + (width * (y-6))]=1;
+		prev[(x-23) + (width * (y-7))]=1;
+		prev[(x-24) + (width * (y-6))]=1;
+		prev[(x-24) + (width * (y-7))]=1;
+
+	}
+	
+	function init() {
+		var x=0;
+		var y=0;
+		var offset = 0;
+		for(y=0;y<height;y++) {
+			offset = y * width
+			for(x=0;x<width;x++) {
+				prev[offset + x] = 0;
+				//next[offset + x] = 1;
+			}
+		}
+        var example = document.getElementById('map');
+        var context = example.getContext('2d');
+        context.fillStyle = "rgb(0,0,0)";
+        context.fillRect(0, 0, width * pixelSize, height * pixelSize);
+ 	var img = new Image();  
+ 	img.onload = function(){    
+ 		context.drawImage(img,0,0);    
+ 		ctx.beginPath();    
+ 		ctx.moveTo(30,96);    
+ 		ctx.lineTo(70,66);    
+ 		ctx.lineTo(103,76);    
+ 		ctx.lineTo(170,15);    
+ 		ctx.stroke();  
+ 	};  
+ 	img.src = 'south_march_google.png';
+
+		loadGosperGliderGunSE();
+
+	}
+
+	function copy() {
+		var x=0;
+		var y=0;
+		var offset = 0;
+		for(y=0;y<height;y++) {
+			offset = y * width
+			for(x=0;x<width;x++) {
+				prev[offset+x] = next[offset + x];
+			}
+		}
+	}
+
+	function display() {
+        var example = document.getElementById('map');
+        var context = example.getContext('2d');
+		var x=0;
+		var y=0;
+		var offset = 0;
+		var yPixel = 0;
+		for(y=0;y<height;y++) {
+			offset = y * width
+			yPixel = y * pixelSize;
+			for(x=0;x<width;x++) {
+				if(prev[offset + x] > 0) {
+		    	    context.fillStyle = "rgb(192,192,255)";
+				} else {
+		        	context.fillStyle = "rgb(0,0,0)";
+				}        		
+				context.fillRect(x * pixelSize, yPixel, pixelSize, pixelSize);
+			}
+		}
+	}
+
+	function iterate() {
+		t=setTimeout("iterate()",10);
+		var x=0;
+		var y=0;
+		var offset = 0;
+		var sum = 0;
+		var i =0;
+		var cell = 0;
+		// non-toroidal for now
+		offset = width * height - width;
+		for(x=0;x<width;x++) {
+			prev[x] = 0;
+			prev[x + offset] = 0;
+		}
+
+		for(y=0;y<height;y++) {
+			offset = width * y;
+			prev[offset] = 0;
+			prev[offset + width - 1] = 0;
+		}
+
+
+		for(y=1;y<height-1;y++) {
+			offset = y * width
+			for(x=1;x<width-1;x++) {
+				sum = 0;
+				for(i=0;i<3;i++) {
+					sum = sum + prev[offset + x - width + i - 1];
+					sum = sum + prev[offset + x + width + i - 1];
+				}
+				cell = prev[offset + x];
+				sum = sum + prev[offset + x - 1];
+				sum = sum + prev[offset + x + 1];
+				// dead cells are born if 3 adjacent
+				// live cells are terminated if 0,1,4,5,6,7,8 adjacent
+				// live cells unchanged if 2,3 adjacent
+				if(cell > 0) {
+	 				if(sum < 2) { // clear
+						next[offset + x] = 0;
+					} else {
+						if(sum < 4) { // live
+							next[offset + x] = 1;
+						} else {
+							next[offset + x] = 0;
+						}
+					}
+				} else {
+					if(sum < 3) {
+						next[offset + x] = 0;
+					} else {
+						if(sum > 3) {
+							next[offset + x] = 0;
+						} else {
+							next[offset + x] = 1;
+						}
+					}
+				}
+			}
+		}
+		display();
+		copy();
+
+		
+
+	}
+    // http://en.wikipedia.org/wiki/Canvas_element
+
+	function start() {
+		init();
+		//load();
+		iterate();
+	}
+    </script>
+</head>
+<body text="#ffffff" bgcolor="#303030" link="#33D033" vlink="#D030D0" alink="#D03000" 
+	onload="javascript:start();">
+<!-- img src="block_fff.jpg" alt="vOacis Application"/-->
+
+<!-- p id="demo">GPS Coordinates :</p>
+<button onclick=doTimer('/logger/FrontController?action=put&c=',1,400,1)>
+Invoke</button>
+<div id="output2"></div>
+
+<b id="output">Output</b><br/>
+<textarea id="1"></textarea-->
+<canvas id="map" width="1920" height="1041">
+This text is displayed if your browser does not support HTML5 Canvas - try the latest Android 2.3, IE9, Firefox or Chrome.
+<!-- img src="south_march_google.png" width="1920" height="1041" alt=""/-->
+</canvas>
+<br/>
+
+</body>
+</html>

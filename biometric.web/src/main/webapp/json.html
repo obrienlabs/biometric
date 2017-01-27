@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html><head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map-canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAu5Xl4wVQTEkPqrIFQLgUAmG-IemMdXF8&sensor=false">
+    </script>
+    <script type="text/javascript">
+    var reading = 0;
+    var map;
+    var marker;
+    var markers = new Array(100);
+    var markerPos = 1;
+    var heartRates = new Array (100);
+    var heartRatePos = 1;
+    var lastLong = 0;
+    var lastLat = 0;
+    var addition = 0;
+    var flip = 0;
+    var color;
+    // for canvas
+    var width = 300;
+    var height = 40
+    var pixelSize = 1;
+    var prev = new Array(1200);
+    //var next = new Array(600);
+
+    
+    //var history = {};
+     var diff = 0.0;
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(45.397, -75),
+          zoom: 15
+        };
+        map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+//$(document).ready(function(){
+//  $("button").click(function(){
+//    $.ajax({url:"/logger/rest/read/json/latest/201403",success:function(result){
+//      $("#div1").html("<h3>" + result.tsStop + "</h3>");
+//    }});
+//  });
+//});
+
+ // display flags
+
+ var aURL;
+ var flicker = new Array();
+ // Timer variables
+ var timers = new Array();
+ var timerStateArray = new Array();
+ var ajax = new Array();
+ var i = 1;
+ //for (i=0;i<<2;i=i+1) {
+     timerStateArray[i] = 0;
+     //ajax[i] = new Ajax();
+     //ajax[i].complete = AjaxUpdateEvent;
+     flicker[i] = 0;
+ //}
+ 
+ // Base case: Switch the timer flag and call the main loop
+ function doTimer(cell,speed,htmlDOMelementId) {
+
+    //aURL = "/logger/rest/read/json/latest/201403";
+    //alert("a");
+//     if(!timerStateArray[cell]) {
+//        timerStateArray[cell] = 1;
+          timedCall(cell,speed,htmlDOMelementId);
+//     }
+ }
+ // Main timing loop calls itself
+ // 127.0.0.1:7001/logger/FrontController?action=setGps&u=2&lg=-75.940446&lt=45.343883&up=3604
+ function timedCall(cell,speed,htmlDOMelementId) {
+    
+    if(flip > 0) {
+        flip = 0;
+        color = '#FF0033';
+    } else {
+        flip = 1;
+        color = '#3333ff';
+    }
+    //alert(document.getElementById("ident").value);
+    aURL = "/logger/rest/read/json/latest/" + document.getElementById("ident").value;
+     //ajax[cell].call(url,htmlDOMelementId);
+     $.ajax({url:aURL,success:function(result){
+      $("#div1").html("r:" + result.sendSeq + ",s:" + result.recvSeq + ",hr1:" + result.heartRate1 + ",hr2:" + result.heartRate2
+      + "," + result.lattitude + "," + result.longitude + "," + (result.tsStop - result.tsStart) + "");
+      
+      if(reading > 1) {
+        
+        addPolyLine(map, parseFloat(lastLat + addition), parseFloat(lastLong + addition), 
+        parseFloat(result.lattitude), parseFloat(result.longitude),
+        color,3);
+      } else {
+        reading++;
+      }
+      //addition+=0.1;
+      lastLat = result.lattitude;
+      lastLong = result.longitude;
+      
+      var aLatLng = new google.maps.LatLng(result.lattitude, (result.longitude + diff));
+      //marker = new google.maps.Marker({
+        //position: aLatLng,
+        //map: map,
+        //title: result.heartRate1 + ":" + result.heartRate2
+        //});
+        
+      //var map = new google.maps.Map(document.getElementById("map-canvas"));
+      //map.setZoom(15);
+      //diff = diff + 0.001;
+      map.setCenter(aLatLng);
+      
+        display();
+        shiftRight();//copy();
+
+        //var example = document.getElementById('minigraph');
+        //var context = example.getContext('2d');
+        //context.fillStyle = "rgb(128,255,10)";
+        //context.fillRect(100,0, 10,10);
+        var i=0;
+        var hr = (parseInt(result.heartRate1) - 60) * 0.5;
+        prev[height * width + width - 2] = 1;
+        for(i=height-1;i>hr;i--) { // vertical line at x=width
+            prev[i * width + width - 2] = 2;
+        }
+
+    }}); // ajax
+    
+ 
+ //     if(timerStateArray[cell]) {
+           timers[cell] = setTimeout(function() { timedCall(cell,speed,htmlDOMelementId); }, speed); // no speed = max speed
+//     }
+ }
+    
+    function addPolyLine(aMap, lat0, long0, lat1, long1, color, weight) {
+        //alert(lat0)
+        var flightPlanCoordinates = [
+        new google.maps.LatLng(lat0, long0),new google.maps.LatLng(lat1, long1)];
+
+        flightPath = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            strokeColor: color,//'#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: weight
+        });
+        flightPath.setMap(map);
+        //alert(lat1);
+    }
+    
+    function shiftRight() {
+        var x=0;
+        var y=0;
+        var offset = 0;
+        for(x=0;x<width;x++) {
+            
+            for(y=1;y<height;y++) {
+            offset = y * width;
+                prev[offset+x-1] = prev[offset + x];
+            }
+        }
+    }
+    
+    function copy() {
+        var x=0;
+        var y=0;
+        var offset = 0;
+        for(y=0;y<height;y++) {
+            offset = y * width;
+            for(x=1;x<width;x++) {
+                prev[offset+x-width] = 1-next[offset + x];
+            }
+        }
+    }
+    
+    function display() {
+        var example = document.getElementById('minigraph');
+        var context = example.getContext('2d');
+        var x=0;
+        var y=0;
+        var offset = 0;
+        var yPixel = 0;
+        var cOffset = 0;
+        for(y=0;y<height;y++) {
+            offset = y * width;
+            yPixel = y * pixelSize;
+            for(x=0;x<width;x++) {
+                cOffset = offset + x;
+                if(prev[cOffset] > 0) {
+                    if(prev[cOffset] > 2) {
+                    context.fillStyle = "rgb(192,32,64)";
+                    } else {
+                    context.fillStyle = "rgb(8,192,64)";
+                    }
+                } else {
+                    context.fillStyle = "rgb(255,255,255)";
+                }               
+                context.fillRect(x * pixelSize, yPixel, pixelSize, pixelSize);
+            }
+        }
+    }
+    
+
+ 
+ 
+    function load() {
+        var x=0;
+        var y=0;
+        var offset = 0;
+        for(y=0;y<height;y++) {
+            offset = y * width
+            for(x=0;x<width;x++) {
+                prev[offset + x] = 0;
+                //next[offset + x] = 1;
+            }
+        }
+        var example = document.getElementById('minigraph');
+        var context = example.getContext('2d');
+        context.fillStyle = "rgb(255,255,255)";
+        context.fillRect(0, 0, width * pixelSize, height * pixelSize);
+    }
+</script>
+</head>
+<body onload="javascript:load();">
+
+<div id="div1"></div><button onclick=doTimer(1,1000,2)>Submit</button>
+Channel:<textarea id="ident" rows=1 cols=14></textarea><br/>
+<canvas id="minigraph" width=300 height=20></canvas>
+<div id="map-canvas" ></div>
+</body>
+</html>

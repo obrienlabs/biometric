@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+<!-- persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"-->
+  <persistence-unit name="from" transaction-type="RESOURCE_LOCAL">
+    <!-- provider>org.eclipse.persistence.jpa.PersistenceProvider</provider-->
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <!-- jta-data-source>derby</jta-data-source-->
+    <!-- mapping-file>META-INF/orm.xml</mapping-file-->
+    <!-- jar-file>WebLogicModel.jar</jar-file-->
+
+    <class>com.obrienlabs.gps.business.entity.Record</class>
+    <class>com.obrienlabs.gps.business.entity.Device</class>
+    <class>com.obrienlabs.gps.business.entity.User</class>
+    <class>com.obrienlabs.gps.business.entity.Session</class>
+    <class>com.obrienlabs.gps.business.entity.Sensor</class>
+    <class>com.obrienlabs.gps.business.entity.SensorTransient</class>
+    <class>com.obrienlabs.gps.business.entity.SensorBuiltIn</class>
+    <class>com.obrienlabs.gps.business.entity.Reading</class>    
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+       <!-- shared-cache-mode>NONE</shared-cache-mode-->
+       <!-- shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode--><!-- override with @Cacheable(true) -->
+       <!-- shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode--><!-- override with @Cacheable(false) -->
+       <!-- shared-cache-mode>NONE</shared-cache-mode--><!-- do not use -->
+       <!-- validation-mode>NONE</validation-mode-->    
+    <properties>
+        <!--  JPA specific -->        
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+      <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.max_fetch_depth" value="3"/>
+      
+      <!-- Hibernate 4.4 -->
+      <!-- http://docs.jboss.org/hibernate/core/3.3/reference/en/html/session-configuration.html#configuration-logging -->
+      <!-- http://netbeans.org/kb/docs/web/hibernate-jpa.html -->
+      <!-- property name="hibernate.hbm2ddl.auto" value="create-drop"/-->      
+      <property name="hibernate.format_sql" value="false"/>            
+        <property name="hibernate.dbcp.maxActive" value="8"/>  
+        <property name="hibernate.dbcp.maxIdle" value="8"/>  
+        <property name="hibernate.dbcp.maxWait" value="1000 * 60 * 30"/>  
+        <property name="hibernate.dbcp.whenExhaustedAction" value="1"/>  
+        <property name="hibernate.dbcp.ps.maxActive" value="8"/>  
+        <property name="hibernate.dbcp.ps.maxIdle" value="8"/>  
+        <property name="hibernate.dbcp.ps.maxWait" value="1000 * 60 * 30"/>  
+        <property name="hibernate.dbcp.ps.whenExhaustedAction" value="1"/>  
+  
+        <property name="current_session_context_class" value="thread"/>  
+            
+            <!-- property name="log4j.logger.org.hibernate.type" value="trace"/>
+            <property name="org.hibernate.type" value="trace"/>
+            <property name="hibernate.type" value="trace"/-->
+            <!-- property name="current_session_context_class" value="jta"/>
+            <property name="hibernate.query.substitutions" value="true 1, false 0, yes Y, no N"/>
+            <property name="hibernate.bytecode.provider" value="cglib"/>
+            <property name="hibernate.jdbc.batch_size" value="10"/-->
+          
+            <!-- 2nd level cache -->
+       		<!-- property name="javax.persistence.cache.retrieveMode" value="true"/>
+       		<property name="javax.persistence.cache.storeMode" value="true"/>       		
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.EhCacheRegionFactory"/-->
+			<!-- property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory"/-->
+    </properties>
+  </persistence-unit>
+ 
+</persistence>

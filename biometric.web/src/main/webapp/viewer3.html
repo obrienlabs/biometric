@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+var map;
+var lat = 44;
+var lon = -75;
+//var pos;
+
+  function showPosition(position)  {
+    	//alert("test");
+  
+	//alert(position.coords.latitude + ":" + position.coords.longitude);
+  	//document.getElementById("output2").innerHTML= position.coords.latitude + ": " + position.coords.longitude;  	
+  	//document.getElementById("1").innerHTML= position.coords.latitude + ": " + position.coords.longitude;
+  	lat = position.coords.latitude;
+  	lon = position.coords.longitude;
+  	//alert(latitude + "," + longitude);
+  }
+  
+    function getLocationUpdate(){
+    	//alert("test1");
+    	   if(navigator.geolocation){
+    	      // timeout at 60000 milliseconds (60 seconds)
+    	      var options = {timeout:5000};
+    	      //alert("test");
+    	      geoLoc = navigator.geolocation;
+    	      watchID = geoLoc.watchPosition(showPosition, 
+    	                                     errorHandler,
+    	                                     options);
+    	     //alert("test");
+    	   }else{
+    	      alert("Sorry, browser does not support geolocation!");
+    	   }
+    	}
+    	
+  function showLocation(position) {
+	  var latitude = position.coords.latitude;
+	  var longitude = position.coords.longitude;
+	  //alert("Latitude : " + latitude + " Longitude: " + longitude);
+	  //document.getElementById("status").innerHTML = "iter: " + iterations;
+	  	//document.getElementById("output2").innerHTML= position.coords.latitude + ": " + position.coords.longitude;  	
+	  	//document.getElementById("1").innerHTML= position.coords.latitude + ": " + position.coords.longitude;
+	  	lat = position.coords.latitude;
+	  	lon = position.coords.longitude;
+		//iterations = iterations + 1;
+		// PUSH to the server
+		//alert("test")
+		
+		//ajax[0].call('/gps/FrontController?action=setGps&u=3&lt=' + lat + '&lg=' + lon + '&ac=1.1',0);
+		alert(lat);
+		map.setCenter(position);
+	}    	
+  function getLocation()  {
+//	  iterations = iterations + 1;
+//	  document.getElementById("status").innerHTML = "iter: " + iterations;
+  	if (navigator.geolocation)    {
+    	navigator.geolocation.getCurrentPosition(showPosition);
+    	alert(latitude + ":" + longitude);
+    } else{
+    	//x.innerHTML="Geolocation is not supported by this browser.";
+    	alert("not supported");
+    }
+  }
+
+
+function initialize() {
+  var mapOptions = {
+    zoom: 17,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  // Try HTML5 geolocation
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
+
+      var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos//,
+        //content: 'Location found using HTML5.'
+      });
+
+      map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+    getLocationUpdate();
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
+  	
+  
+}  
+function initialize2() {
+   /*navigator.geolocation.getCurrentPosition(function(position) {
+       pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
+      
+	};*/
+  var mapOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(45.397, -75.644),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+	getLocationUpdate();
+      
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+<f:loadBundle basename="resources.application" var="msg"/>
+
+<head>
+    <title><h:outputText value="#{msg.welcomeTitle}" /></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+		<script src="../scripts/jquery-1.9.1.min.js"></script><!-- IE8 -->
+		<!-- script src="../scripts/jquery-2.0.0.min.js"></script!-->
+		<script src="../scripts/gps.js"></script>
+		 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+		 <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-9638874893594007";
+/* gps_add_728_90 */
+google_ad_slot = "9413214396";
+/* objectivej_728_90 */
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<!--script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script-->	
+    <script language="javascript">
+    
+    var c=1;
+    var t;
+    var x=0;
+    var pixelSize = 4;
+    var width = 70;
+    var height = 40;
+    var frame = 1;
+
+        //tl 45,21.049,75,59.116,370
+    var tl_lat = 45.350817;
+    var tl_lon = -75.985267;
+    var br_lat = 45.32695;
+    var br_lon = -75.929717;
+    var home_lat = 45.34388333;
+    var home_lon = -75.94043333;
+    
+    
+    var img_length = 2560;//1920;
+    var img_height = 1600;//1041;
+    var lat_scale = (tl_lat - br_lat) / img_height; // per pixel
+    var lon_scale = (br_lon - tl_lon) / img_length;
+    //alert(lat_scale);
+    //alert(lon_scale); 
+    var lon = 1;
+    var lat = 1;
+
+    var img = new Image();  
+      var lat;
+      var lon;
+
+ function FactoryXMLHttpRequest() {
+       if(window.XMLHttpRequest) {
+           // Mozilla
+           return new XMLHttpRequest();
+       } else if(window.ActiveXObject) {
+           try {
+            // Internet Explorer only
+            return new ActiveXObject("Microsoft.XMLHTTP");
+           } catch (e) {
+           }
+       }
+       // Verify Chrome, Firefox, Opera and Apple
+       throw new Error("Could not get an AJAX XMLHttpRequest Object");
+ }
+
+ function Ajax() {
+     this._xmlHttp = new FactoryXMLHttpRequest();
+ }
+
+ // This code is loosely based on 
+ // p.22 of Ajax Patterns and Best Practices by Christian Gross (2006)
+ // and http://www.w3schools.com/js/js_timing.asp
+ // htmlDOMElementId must be an integer
+ function AjaxUpdateEvent(htmlDOMelementId, status, statusText, responseText, responseXML) {
+     // This line updates the DOM <span id="[0-9]+"/>
+     document.getElementById(htmlDOMelementId).innerHTML = responseText;
+     // flash data cell only if data has changed
+     var color = "orange";
+     /*if(flicker[htmlDOMelementId] &lt; 1) {
+         flicker[htmlDOMelementId] = 1;
+         color = "white";
+     } else {
+         flicker[htmlDOMelementId] = 0;
+     }
+     if(responseText != lastValue[htmlDOMelementId]) {
+         document.getElementById(htmlDOMelementId).style.color = color;
+         lastValue[htmlDOMelementId] = responseText;
+     }*/
+     
+ }
+
+ // display flags
+ var flicker = new Array();
+ var lastValue = new Array();
+ // Timer variables
+ var timers = new Array();
+ var timerStateArray = new Array();
+ var ajax = new Array();
+ // initialize all arrays
+ var i = 1;
+      timerStateArray[i] = 0;
+     ajax[i] = new Ajax();
+     ajax[i].complete = AjaxUpdateEvent;
+     flicker[i] = 0;
+
+ 
+ function Ajax_call(url, htmlDOMelementId) {
+     //getLocation();
+     alert(url);
+ 
+     var instance = this;
+     this._xmlHttp.open('GET', url, true);
+     // inner anonymous function
+     this._xmlHttp.onreadystatechange = function() {
+         switch(instance._xmlHttp.readyState) {
+         case 1:
+             instance.loading();
+             break;
+         case 2:
+             instance.loaded();
+             break;
+         case 3:
+             instance.interactive();
+             break;
+         case 4:
+             // pass parameters
+             instance.complete(
+                     htmlDOMelementId,
+                     instance._xmlHttp.status,
+                     instance._xmlHttp.statusText,
+                     instance._xmlHttp.responseText,
+                     instance._xmlHttp.responseXML);
+             break;
+         }
+     };
+     this._xmlHttp.send(null);
+ }
+
+ function Ajax_loading(){ }
+ function Ajax_loaded(){ }
+ function Ajax_interactive(){ }
+ function Ajax_complete(htmlDOMelementId, status, statusText, responseText, responseHTML){ }
+
+ // create static class functions
+ Ajax.prototype.loading = Ajax_loading;
+ Ajax.prototype.loaded = Ajax_loaded;
+ Ajax.prototype.interactive = Ajax_interactive;
+ Ajax.prototype.complete = Ajax_complete;
+ Ajax.prototype.call = Ajax_call;
+
+ // Base case: Switch the timer flag and call the main loop
+ function doTimer(url,cell,speed,htmlDOMelementId) {
+//     if(!timerStateArray[cell]) {
+//        timerStateArray[cell] = 1;
+          timedCall('/logger/rest/read/csv/record/201404010', cell,speed,htmlDOMelementId);
+//     }
+ }
+ // Main timing loop calls itself
+ function timedCall(url,cell,speed,htmlDOMelementId) {
+ 
+     ajax[cell].call(url,htmlDOMelementId);
+//     if(timerStateArray[cell]) {
+           timers[cell] = setTimeout(function() { timedCall(url,cell,speed,htmlDOMelementId); }, speed); // no speed = max speed
+//     }
+ }
+ 
+ function doPing(url) {
+ }      
+      function getLocation()  {
+        if (navigator.geolocation)    {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else{
+            x.innerHTML="Geolocation is not supported by this browser.";
+        }
+      }
+
+    function init() {
+        var x=0;
+        var y=0;
+        var offset = 0;
+    }
+
+      function showPosition(position)  {
+            //alert(position.coords.latitude + ":" + position.coords.longitude);
+            //document.getElementById("output2").innerHTML= position.coords.latitude + ": " + position.coords.longitude;      
+            //document.getElementById("1").innerHTML= position.coords.latitude + ": " + position.coords.longitude;
+            //lat = home_lat;
+            //lon = home_lon;
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+          }
+    
+    function display() {
+        if(frame == 1) {
+            frame = 0;
+        } else {
+            frame = 1;
+        }
+        
+        
+        var example = document.getElementById('example');
+        var context = example.getContext('2d');
+        // get gps
+        getLocation();
+        //navigator.geolocation.getCurrentPosition(showPosition);
+
+        var x = 320;
+        var y = 480;
+        var ox = -((tl_lon-lon) / lon_scale);
+        var oy = ((tl_lat-lat) / lat_scale);
+        //alert(ox);
+        //context.fillStyle = "rgb(0,0,0)";
+        //context.fillRect(0,0,400,400);
+        drawing = new Image() 
+        drawing.src = "march_highlands_asus.png";//south_march_google.png" 
+        context.drawImage(drawing,320-ox,480-oy);
+        //context.drawImage(drawing,320-2063,480-496);
+        var text = "012345678";
+        var cs = Number(text.substring(2,4));
+        //context.lineWidth = 2;
+//        context.strokeStyle = "white";
+        //context.stroke();
+//        context.fillStyle = 'red';
+        context.font = '16pt Calibri';
+        context.fillStyle = 'white';
+
+        context.fillText(cs, 10,30);
+        var _lat = Number(ox);//tl_lat - lat);
+        //context.lineWidth = 3;
+//        context.strokeStyle = "blue";
+        context.fillStyle = 'yellow';
+        //context.stroke();
+        context.fillText(_lat, 10,60);
+        var _lon = Number(oy);//tl_lon - lon);
+        //context.lineWidth = 3;
+//        context.strokeStyle = "green";
+        context.fillStyle = 'orange';
+        //context.stroke();
+        context.fillText(_lon, 10,90);
+
+        // draw point
+/*      context.beginPath();
+        context.strokeStyle = "white";
+        context.lineWidth = 2;
+        context.arc(x, y, 4, 0, 2 * Math.PI, counterClockwise);
+        context.stroke();
+*/
+        x = 0;
+        y=0;
+        if(frame == 1) {
+            context.globalAlpha=1;//0.5; // Half opacity
+            context.fillStyle = "rgb(255,0,0)";
+            context.fillRect(0,0,320,200);//x+12,y+12, 8,8);
+            context.fillStyle = "rgb(255,255,255)";
+            context.fillRect(x,y,32,32);
+            context.globalAlpha=1.0; 
+        }
+    }
+
+    function iterate() {
+        t=setTimeout("iterate()",1000);
+        var cell = 0;
+        display();
+    }
+    // http://en.wikipedia.org/wiki/Canvas_element
+
+    function start() {
+        init();
+        //iterate();
+    }
+    
+    $(function () {
+    $('input').on('click', function () {
+        var status = $(this).val();
+        alert($("textarea[name=status]").val());
+        $.ajax({
+            url: '/logger/rest/read/json/latest/201403'),// + $("textarea[name=status]").val()),
+            data: {
+                text: $("textarea[name=status]").val(),
+                Status: status
+            },
+            dataType : 'json'
+        });
+    });
+});
+
+ $("button1").click(function(){
+ alert("test");
+  $.ajax({url:"/logger/rest/read/json/latest/201403",success:function(result){
+    $("#test1").html(result);
+  }});
+});
+    </script>	
+</head>
+
+<body text="#ffffff" bgcolor="#303030" link="#33D033" vlink="#D030D0" alink="#D03000" onload="javascript:start();">
+    <!-- script>
+
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+        L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+        }).addTo(map);
+
+
+        L.marker([51.5, -0.09]).addTo(map)
+            .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+        L.circle([51.508, -0.11], 500, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5
+        }).addTo(map).bindPopup("I am a circle.");
+
+        L.polygon([
+            [51.509, -0.08],
+            [51.503, -0.06],
+            [51.51, -0.047]
+        ]).addTo(map).bindPopup("I am a polygon.");
+
+
+        var popup = L.popup();
+
+        function onMapClick(e) {
+            popup
+                .setLatLng(e.latlng)
+                .setContent("You clicked the map at " + e.latlng.toString())
+                .openOn(map);
+        }
+
+        map.on('click', onMapClick);
+
+    </script-->
+
+<br/>
+Queries:
+<h:form>
+    <h:panelGrid columns="2" rendered="#{monitorManagedBean.isConnected}">
+        <h:outputLabel for="query">Query: </h:outputLabel>
+        <h:inputText id="query" value="#{monitorManagedBean.query}"/>
+    </h:panelGrid>
+</h:form>
+<br/>
+<button onclick="doTimer('/logger/rest/read/csv/record/201404010',1,1600,2)">Server Start</button>
+<button onclick="doTimer('/logger/rest/read/json/latest/201403',1,5600,2)">Server Stop</button>
+ <!--div id="map" style="width: 600px; height: 400px"></div-->
+ <br/>
+ <textarea id="2"></textarea>
+ <textarea name='status'> </textarea>
+ <input type='button' value='Status Update'/>
+ <textarea name='test1'> </textarea>
+ <input type='button' name="button1" value='jquery'/> 
+ <script language="javascript">
+
+
+     $(function () {
+    $('input').on('click', function () {
+        var status = $(this).val();
+        alert($("textarea[name=status]").val());
+        $.ajax({
+            url: '/logger/rest/read/json/latest/201403'),// + $("textarea[name=status]").val()),
+            data: {
+                text: $("textarea[name=status]").val(),
+                Status: status
+            },
+            dataType : 'json'
+        });
+    });
+});
+    </script>   
+    <canvas id="example" width="320" height="200"/>
+</body>
+</html>
