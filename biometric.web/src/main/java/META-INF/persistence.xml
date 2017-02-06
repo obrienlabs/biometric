@@ -8,14 +8,14 @@
     <!-- mapping-file>META-INF/orm.xml</mapping-file-->
     <!-- jar-file>WebLogicModel.jar</jar-file-->
 
-    <class>com.obrienlabs.gps.business.entity.Record</class>
-    <class>com.obrienlabs.gps.business.entity.Device</class>
-    <class>com.obrienlabs.gps.business.entity.User</class>
-    <class>com.obrienlabs.gps.business.entity.Session</class>
-    <class>com.obrienlabs.gps.business.entity.Sensor</class>
-    <class>com.obrienlabs.gps.business.entity.SensorTransient</class>
-    <class>com.obrienlabs.gps.business.entity.SensorBuiltIn</class>
-    <class>com.obrienlabs.gps.business.entity.Reading</class>    
+    <class>org.obrienlabs.gps.business.entity.Record</class>
+    <class>org.obrienlabs.gps.business.entity.Device</class>
+    <class>org.obrienlabs.gps.business.entity.User</class>
+    <class>org.obrienlabs.gps.business.entity.Session</class>
+    <class>org.obrienlabs.gps.business.entity.Sensor</class>
+    <class>org.obrienlabs.gps.business.entity.SensorTransient</class>
+    <class>org.obrienlabs.gps.business.entity.SensorBuiltIn</class>
+    <class>org.obrienlabs.gps.business.entity.Reading</class>    
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
        <!-- shared-cache-mode>NONE</shared-cache-mode-->
        <!-- shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode--><!-- override with @Cacheable(true) -->
@@ -75,14 +75,14 @@
     <!-- mapping-file>META-INF/orm.xml</mapping-file-->
     <!-- jar-file>WebLogicModel.jar</jar-file-->
 
-    <class>com.obrienlabs.gps.business.entity.Record</class>
-    <class>com.obrienlabs.gps.business.entity.Device</class>
-    <class>com.obrienlabs.gps.business.entity.User</class>
-    <class>com.obrienlabs.gps.business.entity.Session</class>
-    <class>com.obrienlabs.gps.business.entity.Sensor</class>
-    <class>com.obrienlabs.gps.business.entity.SensorTransient</class>
-    <class>com.obrienlabs.gps.business.entity.SensorBuiltIn</class>
-    <class>com.obrienlabs.gps.business.entity.Reading</class>    
+    <class>org.obrienlabs.gps.business.entity.Record</class>
+    <class>org.obrienlabs.gps.business.entity.Device</class>
+    <class>org.obrienlabs.gps.business.entity.User</class>
+    <class>org.obrienlabs.gps.business.entity.Session</class>
+    <class>org.obrienlabs.gps.business.entity.Sensor</class>
+    <class>org.obrienlabs.gps.business.entity.SensorTransient</class>
+    <class>org.obrienlabs.gps.business.entity.SensorBuiltIn</class>
+    <class>org.obrienlabs.gps.business.entity.Reading</class>    
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
        <!-- shared-cache-mode>NONE</shared-cache-mode-->
        <!-- shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode--><!-- override with @Cacheable(true) -->
