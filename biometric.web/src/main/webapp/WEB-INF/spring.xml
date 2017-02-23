@@ -9,19 +9,19 @@
    xmlns:aop="http://www.springframework.org/schema/aop"
    xmlns:mvc="http://www.springframework.org/schema/mvc"
    xsi:schemaLocation="http://www.springframework.org/schema/beans 
-    http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
     http://www.springframework.org/schema/util 
-    http://www.springframework.org/schema/util/spring-util-4.1.xsd
+    http://www.springframework.org/schema/util/spring-util.xsd
      http://www.springframework.org/schema/context 
-      http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+      http://www.springframework.org/schema/context/spring-context.xsd 
        http://www.springframework.org/schema/tx 
-        http://www.springframework.org/schema/tx/spring-tx-4.1.xsd 
+        http://www.springframework.org/schema/tx/spring-tx.xsd 
            http://www.springframework.org/schema/data/jpa
         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
          http://www.springframework.org/schema/mvc 
-         http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+         http://www.springframework.org/schema/mvc/spring-mvc.xsd
          http://www.springframework.org/schema/aop 
-          http://www.springframework.org/schema/aop/spring-aop-4.1.xsd"
+          http://www.springframework.org/schema/aop/spring-aop.xsd"
    default-lazy-init="true">
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -97,7 +97,7 @@
             <list><value>META-INF/orm.xml</value></list>
         </property>
         <!-- requires an anonymous @PersistenceContext and precludes need for a persistence.xml in Spring 3.1-->
-        <property name="packagesToScan" value="com.obrienlabs.gps.business.entity"/>
+        <property name="packagesToScan" value="org.obrienlabs.gps.business.entity"/>
         <property name="jpaVendorAdapter">
             <bean name="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                 <property name="showSql" value="false" />
@@ -139,7 +139,7 @@
     <!-- rest annotations -->
     <mvc:annotation-driven />
     
-    <!--jpa:repositories base-package="com.obrienslabs.gps.business"
+    <!--jpa:repositories base-package="org.obrienslabs.gps.business"
                       entity-manager-factory-ref="entityManagerFactory"
                       transaction-manager-ref="transactionManager"/--> 
     <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
@@ -151,11 +151,11 @@
     <!-- tx:annotation-driven /-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <!--  read in DAO's via Repository annotation -->
-    <context:component-scan base-package="com.obrienslabs.gps.business.*" use-default-filters="false" >
+    <context:component-scan base-package="org.obrienslabs.gps.business.*" use-default-filters="false" >
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </context:component-scan>
     <!--  Rest controllers -->
-    <context:component-scan base-package="com.obrienslabs.gps.business" />
+    <context:component-scan base-package="org.obrienslabs.gps.business" />
     <!-- in cases where the DAO's are in a separate jar - list them -->
     <bean id="daoFacade" class="org.obrienlabs.gps.business.ApplicationService"/>
     
@@ -236,44 +236,11 @@
         </property>
     </bean-->
     <bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-        <property name="contextPath" value="com.obrienlabs.gps.business.entity"/>
+        <property name="contextPath" value="org.obrienlabs.gps.business.entity"/>
         <!-- property name="mappingLocation" value="classpath:META-INF/oxm-mapping.xml"/-->
     </bean>
     
-    <!-- bean class="com.obrienlabs.gps.integration.SwaggerConfig" /-->
-    
-    <!-- 20161109 Neo4j 3.1.0 -->
-    <!-- util:map id="config">
-        <entry key="org.neo4j.server.database.location" value="../work/graph.db"  />
-    </util:map-->
-    
-    <!-- bean id="graphDbFactory" class="com.alu.sdn.neo4j.db.embedded.ARMHighlyAvailableGraphDatabaseFactory">
-        <constructor-arg ref="haMonitor" />
-    </bean-->
-
-    <!-- bean id="graphDbBuilder" factory-bean="graphDbFactory" factory-method="newHighlyAvailableDatabaseBuilder">
-        <constructor-arg value="../work/graph.db"/>
-    </bean>
-
-    <bean id="graphDbBuilderFinal" factory-bean="graphDbBuilder" factory-method="setConfig">
-        <constructor-arg ref="WebService.ServerConfigurator"/>
-    </bean>
-
-    <bean id="graphDatabaseService" factory-bean="graphDbBuilderFinal" 
-        factory-method="newGraphDatabase" destroy-method="shutdown" /-->
-
-    <!--bean id="WebService.ServerConfigurator"
-        class="com.alu.sdn.neo4j.db.embedded.ServerConfigurator"  init-method="init">
-        <constructor-arg ref="config" />
-    </bean-->
-    
-    <!--bean id="graphDatabaseService.wrapper"
-        class="org.neo4j.server.WrappingNeoServerBootstrapper"
-        init-method="start"
-        destroy-method="stop">
-        <constructor-arg ref="graphDatabaseService" index="0"/>
-        <constructor-arg ref="WebService.ServerConfigurator" index="1"/>
-    </bean-->
+    <!-- bean class="org.obrienlabs.gps.integration.SwaggerConfig" /-->
 </beans>
 
 
