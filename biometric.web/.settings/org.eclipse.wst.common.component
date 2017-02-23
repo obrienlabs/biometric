@@ -4,7 +4,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="biometric.model-0.0.9-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/biometric.model/biometric.model">
+        <dependent-module archiveName="biometric.model-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/biometric.model/biometric.model">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/biometric/target/classes"/>

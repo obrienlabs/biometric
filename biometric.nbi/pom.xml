@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.obrienlabs</groupId>
     <artifactId>biometric.root</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <name>biometric_nbi</name>
@@ -67,7 +67,7 @@
         <dependency>
         <groupId>org.obrienlabs</groupId>
         <artifactId>biometric.model</artifactId>
-        <version>0.0.9-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

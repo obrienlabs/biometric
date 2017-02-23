@@ -4,10 +4,10 @@
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
-        <dependent-module archiveName="biometric.sbi-0.0.9-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/biometric.sbi/biometric.sbi">
+        <dependent-module archiveName="biometric.sbi-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/biometric.sbi/biometric.sbi">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="biometric.model-0.0.9-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/biometric.model/biometric.model">
+        <dependent-module archiveName="biometric.model-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/biometric.model/biometric.model">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/biometric.sbi.web/build/classes"/>

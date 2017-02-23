@@ -7,7 +7,7 @@
   <parent>
       <groupId>org.obrienlabs</groupId>
       <artifactId>biometric.root</artifactId>
-      <version>0.0.9-SNAPSHOT</version>
+      <version>1.0.0-SNAPSHOT</version>
   </parent>
   
   <build>
@@ -82,6 +82,7 @@
   </build>
     <properties>
               <jackson-2-version>2.5.1</jackson-2-version>
+              <hibernate-version>5.2.8</hibernate-version>
   </properties>
   <dependencies>
 	<dependency>
@@ -234,7 +235,7 @@
         <version>2.0.0</version>
     </dependency-->
 
-<dependency>
+<!--  -dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>4.0.1.Final</version>
@@ -264,7 +265,6 @@
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>1.0.0.GA</version>
-            <!-- scope>provided</scope-->
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -280,7 +280,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.4</version>
-        </dependency>
+        </dependency-->
     <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
@@ -299,7 +299,7 @@
   	<dependency>
   		<groupId>org.obrienlabs</groupId>
   		<artifactId>biometric.model</artifactId>
-  		<version>0.0.9-SNAPSHOT</version>
+  		<version>1.0.0-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>
