@@ -2,4 +2,4 @@ biometric
 =========
 
 Biometric and GPS tracking data capture
-Real time rest endpoints available
+Real time rest NBI and SBI endpoints available
