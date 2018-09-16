@@ -22,7 +22,7 @@
     
     <!-- rest template experiments p.523 ch 12 -->
     <!-- xml -->
-    <bean id="restTemplateXml" class="org.springframework.web.client.RestTemplate">
+    <!--bean id="restTemplateXml" class="org.springframework.web.client.RestTemplate">
         <property name="messageConverters">
             <list>
                 <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
@@ -39,14 +39,14 @@
                 </bean>
             </list>
         </property>
-    </bean>
+    </bean-->
     <!-- json -->
-    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+    <!--bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
         <property name="messageConverters">
             <list>
-                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"-->
                 <!--bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter"-->
-                    <property name="supportedMediaTypes">
+                    <!--property name="supportedMediaTypes">
                         <list>
                             <bean class="org.springframework.http.MediaType">
                                 <constructor-arg index="0" value="application"/>
@@ -56,9 +56,9 @@
                     </property>
                 </bean>
             </list>
-        </property>
-    </bean>
-    <bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        </property-->
+    <!--/bean-->
+    <!--bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
         <property name="contextPath" value="com.obrienlabs.gps.business.entity"/>
-     </bean>
+     </bean-->
 </beans>

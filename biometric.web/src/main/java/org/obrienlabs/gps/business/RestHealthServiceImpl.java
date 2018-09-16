@@ -38,7 +38,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 
 
-
+// http://biometric.elasticbeanstalk.com/rest/health/health
 
 // Specifies the path to the RESTful service
 @Path("/health")

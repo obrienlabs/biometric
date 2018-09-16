@@ -46,9 +46,9 @@
   
         <property name="current_session_context_class" value="thread"/>  
             
-            <!-- property name="log4j.logger.org.hibernate.type" value="trace"/>
+            <property name="log4j.logger.org.hibernate.type" value="trace"/>
             <property name="org.hibernate.type" value="trace"/>
-            <property name="hibernate.type" value="trace"/-->
+            <property name="hibernate.type" value="trace"/>
             <!-- property name="current_session_context_class" value="jta"/>
             <property name="hibernate.query.substitutions" value="true 1, false 0, yes Y, no N"/>
             <property name="hibernate.bytecode.provider" value="cglib"/>

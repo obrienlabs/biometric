@@ -16,6 +16,8 @@ import org.glassfish.jersey.SslConfigurator;
 
 public class JAXRSClient {
 
+	private static final String SSL_PORT = "https://biometric.elasticbeanstalk.com:443/rest/read";
+	private static final String HTTP_PORT = "http://biometric.elasticbeanstalk.com/rest/read";
     final static char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
         '9', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p',
         'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
@@ -28,31 +30,40 @@ public class JAXRSClient {
     //2367kmqr
     //0145hjnp
     
-	public void run() {
+	public void run(boolean isSSL) {
+		Client client = null;
 		//Long id = 1L;
-		// import cert with
-		// sudo keytool -import -alias nutridat_server -file /Users/michaelobrien/Dropbox/Nutridat/nutridat_domain_cert/20150119_nutridat_server_cer.cer -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/security/tomcat8
-		SslConfigurator sslConfig = SslConfigurator.newInstance()
-		        .trustStoreFile("/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/security/tomcat8")
-		        .trustStorePassword("changeit")
-		        .keyStoreFile("/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/security/tomcat8")
-		        .keyPassword("changeit");
-		SSLContext sslContext = sslConfig.createSSLContext();
-		// fix java.security.cert.CertificateException: No subject alternative names present
-		HostnameVerifier verifier = new HostnameVerifier() {
-		    public boolean verify(String hostname, SSLSession sslSession) {
-		        return true; // TODO: security breach 
-		    }};
-		
-		Client client = ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier(verifier).build();
-		//Client client = ClientBuilder.newClient();
-		//WebTarget rootTarget = client.target("http://138.120.149.110:8080/biometric/rest/read");
-		//WebTarget rootTarget = client.target("http://127.0.0.1:8080/biometric/rest/read");
-		WebTarget rootTarget = client.target("https://obrienlabs.elasticbeanstalk.com:443/rest/read");
-		//WebTarget rootTarget = client.target("http://192.168.0.55:8080/biometric/rest/read");
+		WebTarget latestTarget = null;
+		WebTarget rootTarget = null;
+
+		if(isSSL) {
+			// import cert with
+			// sudo keytool -import -alias nutridat_server -file /Users/michaelobrien/Dropbox/Nutridat/nutridat_domain_cert/20150119_nutridat_server_cer.cer -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/security/tomcat8
+			SslConfigurator sslConfig = SslConfigurator.newInstance()
+					.trustStoreFile("/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/security/tomcat8")
+					.trustStorePassword("changeit")
+					.keyStoreFile("/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/security/tomcat8")
+					.keyPassword("changeit");
+			SSLContext sslContext = sslConfig.createSSLContext();
+			// fix java.security.cert.CertificateException: No subject alternative names present
+			HostnameVerifier verifier = new HostnameVerifier() {
+				public boolean verify(String hostname, SSLSession sslSession) {
+					return true; // TODO: security breach
+				}
+			};
+
+			client = ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier(verifier).build();
+			rootTarget = client.target(SSL_PORT);
+		} else {
+			client = ClientBuilder.newClient();
+			//WebTarget rootTarget = client.target("http://138.120.149.110:8080/biometric/rest/read");
+			//WebTarget rootTarget = client.target("http://127.0.0.1:8080/biometric/rest/read");
+			rootTarget = client.target(HTTP_PORT);
+			//WebTarget rootTarget = client.target("http://192.168.0.55:8080/biometric/rest/read");
+
+		}
 		//WebTarget latestTarget = rootTarget.path("json/latest");
-		WebTarget latestTarget = rootTarget.path("geohashcount");//json/record");
-		
+		latestTarget = rootTarget.path("geohashcount");//json/record");
 		// https://obrienlabs.elasticbeanstalk.com/rest/read/geohashcount/f241b3
 		try {
 			WebTarget finalTarget = null;
@@ -66,7 +77,8 @@ public class JAXRSClient {
 				long before = System.currentTimeMillis();
 				record = finalTarget.request().get(String.class);//Long.class);//Record.class);
 				long after = System.currentTimeMillis();
-				System.out.println(new StringBuffer(prefix + String.valueOf(digits[id])).append(":").append(record).append(" : ").append(String.valueOf(after - before)).toString());
+				System.out.println(new StringBuffer(prefix + String.valueOf(digits[id])).append(":").append(record)
+						.append(" : ").append(String.valueOf(after - before)).toString());
 			}
 		} catch (Exception e)  {
 			e.printStackTrace();
@@ -78,7 +90,7 @@ public class JAXRSClient {
 	
 	public static void main(String[] args) {
 		JAXRSClient client = new JAXRSClient();
-		client.run();
+		client.run(false);
 	}
 
 }

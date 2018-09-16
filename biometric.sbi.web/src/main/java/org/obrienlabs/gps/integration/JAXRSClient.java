@@ -28,7 +28,7 @@ public class JAXRSClient {
     //2367kmqr
     //0145hjnp
     
-	public void run() {
+	/*public void run(boolean isSSL) {
 		//Long id = 1L;
 		// import cert with
 		// sudo keytool -import -alias nutridat_server -file /Users/michaelobrien/Dropbox/Nutridat/nutridat_domain_cert/20150119_nutridat_server_cer.cer -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/security/tomcat8
@@ -72,12 +72,12 @@ public class JAXRSClient {
 		} finally {
 			client.close();
 		}
-	}
-	
-	
+	}*/
+
+
 	public static void main(String[] args) {
 		JAXRSClient client = new JAXRSClient();
-		client.run();
+		//client.run(false);
 	}
 
 }
