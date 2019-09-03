@@ -22,6 +22,8 @@
     <module>biometric.sbi.web</module>
     <module>biometric.nbi.web</module>
     <module>biometric.web</module>
+    
+    <module>biometric.web.docker</module>
   </modules>
   <build>
       <plugins>
