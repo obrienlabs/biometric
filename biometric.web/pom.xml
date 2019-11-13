@@ -81,7 +81,7 @@
       </pluginManagement>
   </build>
     <properties>
-              <jackson-2-version>2.5.1</jackson-2-version>
+              <jackson-2-version>2.10.1</jackson-2-version>
               <hibernate-version>5.2.8</hibernate-version>
   </properties>
   <dependencies>
