@@ -44,49 +44,14 @@
                 </configuration>
             </plugin-->
     </plugins>
-      <pluginManagement>
-      	<plugins>
-      		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-      		<plugin>
-      			<groupId>org.eclipse.m2e</groupId>
-      			<artifactId>lifecycle-mapping</artifactId>
-      			<version>1.0.0</version>
-      			<configuration>
-      				<lifecycleMappingMetadata>
-      					<pluginExecutions>
-      						<pluginExecution>
-      							<pluginExecutionFilter>
-      								<groupId>
-      									org.apache.maven.plugins
-      								</groupId>
-      								<artifactId>
-      									maven-compiler-plugin
-      								</artifactId>
-      								<versionRange>
-      									[3.2,)
-      								</versionRange>
-      								<goals>
-      									<goal>testCompile</goal>
-      								</goals>
-      							</pluginExecutionFilter>
-      							<action>
-      								<ignore></ignore>
-      							</action>
-      						</pluginExecution>
-      					</pluginExecutions>
-      				</lifecycleMappingMetadata>
-      			</configuration>
-      		</plugin>
-      	</plugins>
-      </pluginManagement>
-  </build>
+   </build>
     <properties>
-              <jackson-2-version>2.5.1</jackson-2-version>
+              <jackson-2-version>2.10.3</jackson-2-version>
               <hibernate-version>5.2.8</hibernate-version>
   </properties>
   <dependencies>
 
-      <dependency>
+      <!--  -dependency>
           <groupId>org.eclipse.emf</groupId>
           <artifactId>org.eclipse.emf.ecore</artifactId>
           <version>2.11.0-v20150123-0347</version>
@@ -103,16 +68,14 @@
       </dependency>
       <dependency>
           <groupId>org.eclipse.core</groupId>
-          <artifactId>runtime</artifactId> <!-- from org.eclipse.core.runtime -->
-          <!--version>3.10.0.v20140318-2214</version--><!-- does not resolve -->
-          <version>3.9.100-v20131218-1515</version><!-- resolves (same pom as 3.10 though -->
+          <artifactId>runtime</artifactId> 
+          <version>3.9.100-v20131218-1515</version>
       </dependency>
       <dependency>
           <groupId>org.eclipse.core</groupId>
-          <artifactId>contenttype</artifactId> <!-- from org.eclipse.core.contentType -->
-          <!--version>3.4.200.v20140207-1251</version--><!-- does not resolve -->
-          <version>3.4.200-v20130326-1255</version> <!-- resolves -->
-      </dependency>
+          <artifactId>contenttype</artifactId>
+          <version>3.4.200-v20130326-1255</version> 
+      </dependency-->
 
 
 	<dependency>
