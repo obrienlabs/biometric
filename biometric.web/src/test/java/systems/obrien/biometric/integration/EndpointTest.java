@@ -10,4 +10,5 @@ public class EndpointTest {
 		System.out.println("test");
 		
 	}
+	
 }

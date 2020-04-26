@@ -1,0 +1,1 @@
+select * from biometric.gps_record r where r.userid like '201909175'

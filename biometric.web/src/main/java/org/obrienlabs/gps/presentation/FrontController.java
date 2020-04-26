@@ -42,6 +42,7 @@ import org.obrienlabs.gps.business.entity.SensorTransient;
 //import javax.servlet.http.HttpSession;
 import org.obrienlabs.gps.business.entity.Session;
 import org.obrienlabs.gps.business.entity.User;
+import org.obrienlabs.gps.util.JDBCTest;
 
 
 /**
@@ -549,7 +550,7 @@ public class FrontController extends HttpServlet {
         StringBuffer xmlBuffer = new StringBuffer();
         long number = System.nanoTime();
         xmlBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        xmlBuffer.append("<state>");
+        xmlBuffer.append("<stat>");
         switch (cellNumber) {
         case 0:
             long random = Math.round(Math.random() * 1000);
@@ -563,11 +564,14 @@ public class FrontController extends HttpServlet {
         case 1:
             xmlBuffer.append(number);
             break;
+        case 2:
+        	//xmlBuffer.append(new JDBCTest().testConnection("o*s", "Or*d", "true"));
+        	break;
         default:
             xmlBuffer.append(number);
             break;
         }
-        xmlBuffer.append("</state>");
+        xmlBuffer.append("</stat>");
         out.println(xmlBuffer.toString());        
         //StringBuffer outBuffer = new StringBuffer("Thread: ");        
         System.out.println("_xml: " + xmlBuffer.toString());
