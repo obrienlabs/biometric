@@ -2,3 +2,4 @@ target/
 bin/
 logs/
 build/
+.settings
