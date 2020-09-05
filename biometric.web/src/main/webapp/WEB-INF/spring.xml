@@ -155,7 +155,7 @@
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </context:component-scan>
     <!--  Rest controllers -->
-    <context:component-scan base-package="org.obrienslabs.gps.business" />
+    <context:component-scan base-package="org.obrienlabs.gps.business" />
     <!-- in cases where the DAO's are in a separate jar - list them -->
     <bean id="daoFacade" class="org.obrienlabs.gps.business.ApplicationService"/>
     

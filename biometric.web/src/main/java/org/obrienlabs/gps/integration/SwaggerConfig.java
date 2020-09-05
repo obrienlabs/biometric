@@ -8,7 +8,6 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.context.ServletContextAware;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
@@ -16,6 +15,9 @@ import com.mangofactory.swagger.models.dto.ApiInfo;
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+
+import springfox.documentation.spring.web.plugins.Docket;
+
 
 @EnableSwagger
 public class SwaggerConfig implements ServletContextAware {
@@ -33,6 +35,11 @@ public class SwaggerConfig implements ServletContextAware {
 	    private static final String API_LICENSE = "";
 
 	    private static final String API_LICENSE_URL = "";
+	    
+	    /*@Bean
+	    public Docket apiOP {
+	    	//return new Docket(DocumentationType)
+	    }*/
 	    
 	    @Autowired
 	    private SpringSwaggerConfig springSwaggerConfig;
@@ -57,9 +64,6 @@ public class SwaggerConfig implements ServletContextAware {
 	        return systemProperties.containsKey(ENV_DOC_DEV) && systemProperties.getProperty(ENV_DOC_DEV).equals("true");
 	    }
 
-	    /**
-	     * Swagger MVC will return api-docs to the first implementation found - in this case we want it to be the latest (v3)
-	     */
 	    
 	    @Bean
 	    public SwaggerSpringMvcPlugin v3Implementation(){
@@ -70,17 +74,6 @@ public class SwaggerConfig implements ServletContextAware {
 	    public SwaggerSpringMvcPlugin v2Implementation(){
 	        return create("v2");
 	    }
-
-	    /** for future **//*
-	    @Bean
-	    public SwaggerSpringMvcPlugin v4Implementation(){
-	        return create("v4");
-	    }
-
-	    @Bean
-	    public SwaggerSpringMvcPlugin v5Implementation(){
-	        return create("v5");
-	    }*/
 
 	    @Bean
 	    public SwaggerSpringMvcPlugin allImplementation(){
@@ -140,22 +133,7 @@ public class SwaggerConfig implements ServletContextAware {
 	        return apiInfo;
 	    }
 
-	    /*public String getAppBasePath() {
-	        return UriComponentsBuilder
-	                .fromHttpUrl(docsLocation)
-	                .path(servletContext.getContextPath())
-	                .build()
-	                .toString();
-	    }
 
-	    @Override
-	    public String getSwaggerDocumentationBasePath() {
-	        return UriComponentsBuilder
-	                .fromHttpUrl(getAppBasePath())
-	                .pathSegment("api-docs/")
-	                .build()
-	                .toString();
-	    }*/
 	    @Override
 	    public void setServletContext(ServletContext aInServletContext)
 	    {
