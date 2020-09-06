@@ -10,18 +10,13 @@ import java.net.URL;
 import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 //import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -32,20 +27,18 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import org.obrienlabs.gps.business.entity.Device;
 import org.obrienlabs.gps.business.entity.Record;
 import org.obrienlabs.gps.business.entity.User;
 import org.obrienlabs.gps.business.integration.GeoHash;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+//import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
-@TransactionConfiguration( transactionManager = "transactionManager", defaultRollback = true)
+//@TransactionConfiguration( transactionManager = "transactionManager", defaultRollback = true)
 @Service("daoFacade")
 @Repository(value="daoFacade")
 //@Transactional // will get a javax.persistence.TransactionRequiredException: No transactional EntityManager available without it
