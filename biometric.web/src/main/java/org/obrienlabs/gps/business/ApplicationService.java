@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.transaction.TransactionConfiguration;
+//import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +54,7 @@ import org.obrienlabs.gps.business.entity.Record;
 import org.obrienlabs.gps.business.entity.User;
 
 
-@TransactionConfiguration( transactionManager = "transactionManager", defaultRollback = true)
+//@TransactionConfiguration( transactionManager = "transactionManager", defaultRollback = true)
 @Service("daoFacade")
 @Repository(value="daoFacade")
 //@Transactional // will get a javax.persistence.TransactionRequiredException: No transactional EntityManager available without it
@@ -66,7 +66,7 @@ public class ApplicationService implements ApplicationServiceLocal {
 	@PersistenceContext(name="${os.environment.persistencecontext.applicationservice.name}")//(unitName="entityManagerFactory", type=PersistenceContextType.TRANSACTION)
 	private EntityManager entityManager;
 	
-    private Map<Long,  Record> userRecordMap = new ConcurrentHashMap<>();
+    private Map<Long,Record> userRecordMap = new ConcurrentHashMap<>();
     private Long currentUser = 0L;
     public static final Record fakeRecord;
     static {
