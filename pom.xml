@@ -79,6 +79,7 @@
             <spring.version>5.2.5.RELEASE</spring.version>
             <spring.security.version>4.1.0.RELEASE</spring.security.version>
             <spring.boot.version>1.2.5.RELEASE</spring.boot.version>
+            <jaxb.version>2.3.0</jaxb.version>
 
   </properties>
 
@@ -233,6 +234,22 @@
             <version>1.6.4</version>
         </dependency>
 
+		<!--  Java 11 removed JAXB -->
+		<dependency>
+  			<groupId>javax.xml.bind</groupId>
+  			<artifactId>jaxb-api</artifactId>
+  			<version>${jaxb.version}</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.sun.xml.bind</groupId>
+  			<artifactId>jaxb-core</artifactId>
+  			<version>${jaxb.version}</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.sun.xml.bind</groupId>
+  			<artifactId>jaxb-impl</artifactId>
+  			<version>${jaxb.version}</version>
+		</dependency>
     <!-- swagger needs 15 of guava-->
     <dependency>
         <groupId>com.mangofactory</groupId>
