@@ -16,8 +16,11 @@ import org.glassfish.jersey.SslConfigurator;
 
 public class JAXRSClient {
 
+	//private static final String SSL_PORT = "https://biometric.elasticbeanstalk.com:443/rest/read/json/latest/20201026";
 	private static final String SSL_PORT = "https://biometric.elasticbeanstalk.com:443/rest/read";
+	// http://biometric.elasticbeanstalk.com/rest/read/json/latest/20201026
 	private static final String HTTP_PORT = "http://biometric.elasticbeanstalk.com/rest/read";
+	//https://2qau3lngjh.execute-api.us-east-1.amazonaws.com/biometric-stg/
     final static char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
         '9', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p',
         'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
@@ -62,7 +65,7 @@ public class JAXRSClient {
 			//WebTarget rootTarget = client.target("http://192.168.0.55:8080/biometric/rest/read");
 
 		}
-		//WebTarget latestTarget = rootTarget.path("json/latest");
+		//latestTarget = rootTarget.path("json/latest");
 		latestTarget = rootTarget.path("geohashcount");//json/record");
 		// https://obrienlabs.elasticbeanstalk.com/rest/read/geohashcount/f241b3
 		try {
