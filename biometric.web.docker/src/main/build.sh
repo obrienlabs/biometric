@@ -23,7 +23,7 @@ docker run --name biometric_web -d -p 8888:8080 -v ~/Dropbox/env/mbp4/biometric/
 -e os.environment.db.biometric.schema=biometric \
 -e os.environment.db.url=127.0.0.1:3406/biometric?useSSL=true \
 -e os.environment.db.username=obrienlabs \
--e os.environment.db.password=OracleCloud \
+-e os.environment.db.password=oc \
 -e os.environment.discriminator=biometric \
 -e os.environment.ecosystem=prod biometric-web:latest
 
